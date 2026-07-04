@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -17,11 +17,41 @@ export const Route = createFileRoute("/")({
           "Descubre el método secreto para llevar a tu pareja al éxtasis total, incluso si nunca lo has hecho antes.",
       },
     ],
+    scripts: [
+      {
+        children:
+          "!function(i,n){i._plt=i._plt||(n&&n.timeOrigin?n.timeOrigin+n.now():Date.now())}(window,performance);",
+      },
+    ],
+    links: [
+      {
+        rel: "preload",
+        href: "https://scripts.converteai.net/de722e53-c16b-41db-816f-0d70e83ce9c1/players/6a48b32f2a42658b1bd2bd83/v4/player.js",
+        as: "script",
+      },
+      {
+        rel: "preload",
+        href: "https://scripts.converteai.net/lib/js/smartplayer-wc/v4/smartplayer.js",
+        as: "script",
+      },
+      {
+        rel: "preload",
+        href: "https://cdn.converteai.net/de722e53-c16b-41db-816f-0d70e83ce9c1/6a48b31e9fcf9591281f3f5c/main.m3u8",
+        as: "fetch",
+      },
+      { rel: "dns-prefetch", href: "https://cdn.converteai.net" },
+      { rel: "dns-prefetch", href: "https://scripts.converteai.net" },
+      { rel: "dns-prefetch", href: "https://images.converteai.net" },
+      { rel: "dns-prefetch", href: "https://license.vturb.com" },
+    ],
   }),
   component: Index,
 });
 
 const CHECKOUT_URL = "#planes";
+const VTURB_PLAYER_SRC =
+  "https://scripts.converteai.net/de722e53-c16b-41db-816f-0d70e83ce9c1/players/6a48b32f2a42658b1bd2bd83/v4/player.js";
+const VTURB_PLAYER_ID = "vid-6a48b32f2a42658b1bd2bd83";
 
 function useCountdown(seconds: number) {
   const [t, setT] = useState(seconds);
@@ -34,8 +64,44 @@ function useCountdown(seconds: number) {
   return `${m}:${s}`;
 }
 
+const VslPlayer = memo(function VslPlayer() {
+  const hostRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const host = hostRef.current;
+    if (!host || host.querySelector("vturb-smartplayer")) return;
+
+    const player = document.createElement("vturb-smartplayer");
+    player.id = VTURB_PLAYER_ID;
+    player.setAttribute("style", "display: block; margin: 0 auto; width: 100%; max-width: 400px;");
+
+    const placeholder = document.createElement("div");
+    placeholder.className = "vturb-player-placeholder";
+    placeholder.setAttribute(
+      "style",
+      "position: relative; width: 100%; padding: 177.77777777777777% 0 0; z-index: 0; background-color: black;",
+    );
+
+    player.appendChild(placeholder);
+    host.replaceChildren(player);
+  }, []);
+
+  return <div ref={hostRef} suppressHydrationWarning className="w-full max-w-[400px] mx-auto min-h-[711px]" />;
+});
+
 function Index() {
   const time = useCountdown(15 * 60);
+
+  useEffect(() => {
+    const existingScript = document.querySelector<HTMLScriptElement>(`script[data-vturb-player="${VTURB_PLAYER_ID}"]`);
+    if (existingScript) return;
+
+    const script = document.createElement("script");
+    script.src = VTURB_PLAYER_SRC;
+    script.async = true;
+    script.dataset.vturbPlayer = VTURB_PLAYER_ID;
+    document.head.appendChild(script);
+  }, []);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -65,24 +131,9 @@ function Index() {
 
       {/* Video area */}
       <section className="px-4 pb-16 max-w-4xl mx-auto">
-        <div className="rounded-2xl overflow-hidden border-2 border-primary shadow-[0_20px_60px_-20px_var(--primary)] bg-black">
-          <div className="aspect-video w-full relative flex items-center justify-center group cursor-pointer">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent" />
-            <div className="relative z-10 text-center">
-              <div className="w-20 h-20 rounded-full bg-primary/90 flex items-center justify-center mx-auto shadow-lg group-hover:scale-110 transition-transform">
-                <svg className="w-8 h-8 text-primary-foreground ml-1" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-              </div>
-              <p className="mt-4 text-lg font-bold text-white">Ver video de presentación</p>
-              <p className="mt-1 text-sm text-white/70">Descubre en 2 minutos lo que vas a aprender</p>
-            </div>
-            <div className="absolute bottom-3 right-3 text-xs text-white/50 font-mono">02:34</div>
-          </div>
+        <div className="rounded-2xl overflow-hidden border-2 border-primary shadow-[0_20px_60px_-20px_var(--primary)] bg-black p-2 md:p-4">
+          <VslPlayer />
         </div>
-        <p className="text-center mt-4 text-xs text-muted-foreground">
-          Reemplaza este bloque por tu video de ventas (YouTube, Vimeo o archivo MP4)
-        </p>
       </section>
 
       {/* Problem / Solution */}
@@ -227,10 +278,6 @@ function Index() {
               />
             </div>
           </div>
-          <p className="text-center mt-4 text-xs text-muted-foreground">
-            💡 Sube tus gifs/imágenes a la carpeta <code className="text-primary">public/demo/</code> con los nombres:
-            demo-1.gif, demo-2.gif, demo-3.gif y demo-hero.gif
-          </p>
         </div>
       </section>
 
