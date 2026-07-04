@@ -49,6 +49,9 @@ export const Route = createFileRoute("/")({
 });
 
 const CHECKOUT_URL = "#planes";
+const CHECKOUT_URL_STARTER = "https://pay.hotmart.com/S106603672J?off=qk3nrfd5";
+const CHECKOUT_URL_PRO = "https://pay.hotmart.com/S106603672J?off=mfaq8o2b";
+const CHECKOUT_URL_FULL = "https://pay.hotmart.com/S106603672J?off=lz4j6e0y";
 const VTURB_PLAYER_SRC =
   "https://scripts.converteai.net/de722e53-c16b-41db-816f-0d70e83ce9c1/players/6a48b32f2a42658b1bd2bd83/v4/player.js";
 const VTURB_PLAYER_ID = "vid-6a48b32f2a42658b1bd2bd83";
@@ -284,8 +287,13 @@ function Index() {
       {/* Author */}
       <section className="px-4 py-16 max-w-4xl mx-auto text-center">
         <h2 className="text-2xl md:text-4xl font-black">¿Y quién soy yo para enseñarte esto?</h2>
-        <div className="mt-8 w-32 h-32 rounded-full mx-auto bg-gradient-to-br from-primary to-card border-4 border-primary flex items-center justify-center text-4xl font-black">
-          IS
+        <div className="mt-8 w-32 h-32 rounded-full mx-auto overflow-hidden border-4 border-primary bg-card">
+          <img
+            src="/isabela.png"
+            alt="Isabela Santos"
+            loading="lazy"
+            className="w-full h-full object-cover"
+          />
         </div>
         <h3 className="mt-6 text-2xl font-bold">Isabela Santos</h3>
         <p className="text-primary text-sm font-semibold tracking-widest mt-1">
@@ -378,17 +386,14 @@ function Index() {
                 <li className="text-muted-foreground">❌ Bonos incluidos</li>
               </ul>
               <a
-                href={CHECKOUT_URL}
+                href={CHECKOUT_URL_STARTER}
                 className="mt-6 block text-center bg-secondary text-secondary-foreground font-bold py-3 rounded-lg hover:brightness-125 transition"
               >
                 QUIERO EL INICIAL
               </a>
             </div>
 
-            <div className="rounded-2xl border-2 border-primary bg-card p-8 relative shadow-[0_20px_60px_-20px_var(--primary)]">
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full">
-                🔥 EL MÁS ELEGIDO
-              </span>
+            <div className="rounded-2xl border border-border bg-card p-8">
               <h3 className="text-xl font-bold">Plan Pro</h3>
               <p className="text-sm text-muted-foreground mt-1">Las 23 técnicas + 1 bono especial</p>
               <p className="mt-6 text-sm text-muted-foreground line-through">De USD 79,90</p>
@@ -406,14 +411,17 @@ function Index() {
                 <li className="text-muted-foreground">❌ Acceso completo a todos los bonos</li>
               </ul>
               <a
-                href={CHECKOUT_URL}
-                className="mt-6 block text-center bg-primary text-primary-foreground font-bold py-3 rounded-lg hover:brightness-110 transition"
+                href={CHECKOUT_URL_PRO}
+                className="mt-6 block text-center bg-secondary text-secondary-foreground font-bold py-3 rounded-lg hover:brightness-125 transition"
               >
                 QUIERO EL PLAN PRO
               </a>
             </div>
 
-            <div className="rounded-2xl border border-border bg-card p-8">
+            <div className="rounded-2xl border-2 border-primary bg-card p-8 relative shadow-[0_20px_60px_-20px_var(--primary)]">
+              <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full">
+                🔥 EL MÁS ELEGIDO
+              </span>
               <h3 className="text-xl font-bold">Acceso Completo</h3>
               <p className="text-sm text-muted-foreground mt-1">Curso completo + todos los bonos visibles</p>
               <p className="mt-6 text-sm text-muted-foreground line-through">De USD 129,90</p>
@@ -434,8 +442,8 @@ function Index() {
                 <li>✅ Kamasutra Tántrico</li>
               </ul>
               <a
-                href={CHECKOUT_URL}
-                className="mt-6 block text-center bg-secondary text-secondary-foreground font-bold py-3 rounded-lg hover:brightness-125 transition"
+                href={CHECKOUT_URL_FULL}
+                className="mt-6 block text-center bg-primary text-primary-foreground font-bold py-3 rounded-lg hover:brightness-110 transition"
               >
                 QUIERO EL ACCESO COMPLETO
               </a>
